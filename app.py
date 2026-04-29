@@ -7,6 +7,7 @@ import json
 import logging
 from flask import Flask, request, jsonify, Response
 from pdf_generator import generate_pdf
+from pdf_generator_complet import generate_pdf_complet
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -51,6 +52,32 @@ def audit_menu():
             "Access-Control-Allow-Methods": "POST, OPTIONS",
         }
     )
+    app.logger.info(f"PDF généré : {filename} ({len(pdf_bytes)} bytes)")
+    return response
+
+
+@app.route("/audit-complet", methods=["POST", "OPTIONS"])
+def audit_complet():
+    if request.method == "OPTIONS":
+        return _cors_response("", 204)
+    if not request.is_json:
+        return _cors_response(jsonify({"error": "Content-Type doit être application/json"}), 400)
+    data = request.get_json(silent=True)
+    if data is None:
+        return _cors_response(jsonify({"error": "JSON invalide ou vide"}), 400)
+    restaurant = data.get("infos", {}).get("restaurant", "rapport")
+    try:
+        pdf_bytes = generate_pdf_complet(data)
+    except Exception as e:
+        app.logger.error(f"Erreur PDF Audit Complet : {e}", exc_info=True)
+        return _cors_response(jsonify({"error": "Erreur génération PDF", "detail": str(e)}), 500)
+    filename = f"audit_complet_{restaurant.replace(' ', '_')}.pdf"
+    response = Response(pdf_bytes, status=200, mimetype="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"',
+                 "Content-Length": str(len(pdf_bytes)),
+                 "Access-Control-Allow-Origin": "*",
+                 "Access-Control-Allow-Headers": "Content-Type",
+                 "Access-Control-Allow-Methods": "POST, OPTIONS"})
     app.logger.info(f"PDF généré : {filename} ({len(pdf_bytes)} bytes)")
     return response
 
