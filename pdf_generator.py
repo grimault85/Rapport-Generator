@@ -75,8 +75,8 @@ def draw_footer(c, restaurant="", date=""):
     c.setFont("Helvetica", 7)
     fill(c, MUTED)
     c.drawString(ML, 4*mm, f"Audit Menu — {restaurant} — {date}")
-    c.drawCentredString(W/2, 4*mm, "Document confidentiel — La Carte Advisory")
-    c.drawRightString(MR, 4*mm, "lacarte-advisory.fr")
+    c.drawCentredString(W/2, 4*mm, "Document confidentiel — La Carte")
+    c.drawRightString(MR, 4*mm, "lacarte-conseil.fr")
 
 
 # ─── UI PRIMITIVES ────────────────────────────────────────────────────────────
@@ -205,7 +205,7 @@ def page_cover(c, d):
     cy = H * 0.65
     c.setFont("Helvetica", 9)
     fill(c, GOLD_DIM)
-    c.drawCentredString(W/2, cy + 22*mm, "LA CARTE ADVISORY")
+    c.drawCentredString(W/2, cy + 22*mm, "LA CARTE")
     fill(c, GOLD)
     c.rect(W/2 - 25*mm, cy + 19*mm, 50*mm, 0.6*mm, fill=1, stroke=0)
 
@@ -242,7 +242,7 @@ def page_cover(c, d):
     c.rect(0, 0, W, 1*mm, fill=1, stroke=0)
     c.setFont("Helvetica", 7)
     fill(c, MUTED)
-    c.drawCentredString(W/2, 5*mm, "lacarte-advisory.fr — conseil@lacarte-advisory.fr")
+    c.drawCentredString(W/2, 5*mm, "www.lacarte-conseil.fr — lacarte.advisory@gmail.com")
 
 
 def page_synthese(c, page_num, total_pages, d):
